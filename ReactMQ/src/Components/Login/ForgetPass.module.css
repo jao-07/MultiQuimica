@@ -1,0 +1,24 @@
+.recall_forget{
+    display: flex;
+    justify-content: space-between;
+    font-size: 14.5px;
+    margin: -15px 0 15px;
+}
+
+.recall_forget label{
+    color: green;
+}
+
+.recall_forget input{
+    margin-right: 5px;
+}
+
+.recall_forget a{
+    color: green;
+    text-decoration: none;
+}
+
+.recall_forget a:hover{
+    text-decoration: underline;
+}
+
