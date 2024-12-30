@@ -1,12 +1,28 @@
-import './App.css'
-import Login from './Components/Login/Login.jsx'
+import React from "react";
+import "./App.css"
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./Components/Login/Login.jsx";
+import Company from "./Components/pages/Company.jsx";
+import ProtectedRoute from "./Components/pages/ProtectedRoutes.jsx";
 
-function App() {
+const App = () => {
   return (
     <div className="App">
-        <Login />
-    </div>
-  )
-}
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
 
-export default App
+          <Route path="/menu" element={
+            <ProtectedRoute>
+                <Company/>
+            </ProtectedRoute>
+          } />
+
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
+      </Router>
+    </div>
+  );
+};
+
+export default App;
