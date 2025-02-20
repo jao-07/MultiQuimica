@@ -1,0 +1,40 @@
+.item{
+    background-color: aliceblue;
+    height: 12vh;
+    width: 100%;
+    margin: 2vw 0 0 0;
+    padding: 10px 0 10px 20px;
+    font-size: 18px;
+}
+
+.item:hover{
+    cursor: pointer;
+}
+
+.firstLine{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2vh 2vh 2vh;
+    font-family: inherit;
+}
+
+.nome{
+    font-family: "Poppins", sans-serif;
+}
+
+.valor{
+    text-align: right;
+    font-family: "Rubik", sans-serif;
+}
+
+.secondLine{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2vh 2vh 2vh;
+    font-family: inherit;
+}
+
+.data{
+    padding-bottom: 10px;
+    font-family: "Rubik", sans-serif;
+}

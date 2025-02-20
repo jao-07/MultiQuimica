@@ -1,0 +1,20 @@
+.container{
+    background-color: green;
+    color: white;
+}
+
+.produto{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0 10px 20px;
+    border-bottom: solid 2px;
+}
+
+.nome{
+    padding-left: 2vh;
+}
+
+.quantidade{
+    padding-right: 2vh;
+}
+

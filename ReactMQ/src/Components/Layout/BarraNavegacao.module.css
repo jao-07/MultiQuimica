@@ -1,0 +1,36 @@
+.barra{
+    position: fixed;
+    width: 100%;
+    top: 0;
+    display: flex;
+    justify-content: end;
+    background-color: #222;
+    padding: 2em;
+}
+
+.lista{
+    display: flex;
+    list-style: none;
+    align-items: center;
+    justify-content: end;
+}
+
+.active{
+    color: green;
+    text-decoration: none;
+    margin-left: 3em;
+}
+
+.active:hover{
+    color: gray;
+}
+
+.notActive{
+    color: white;
+    text-decoration: none;
+    margin-left: 3em;
+}
+
+.notActive:hover{
+    color: yellow;
+}

@@ -6,11 +6,8 @@
 }
 
 .App{
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: block;
   min-height: 100vh;
-  background-color: gray;
   background-size: cover;
   background-position: center;
 }
