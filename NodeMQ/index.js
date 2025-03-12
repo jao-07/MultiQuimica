@@ -1,97 +1,85 @@
 import dotenv from "dotenv"
 import express from "express"
-import cors from "cors"
 import mysql from "mysql2/promise"
-import jwt from "jsonwebtoken"
-import cookieParser from "cookie-parser"
+import cors from "cors"
+
+const PORT = process.env.PORT || 3000
 
 dotenv.config();
 
-const dbHost = process.env.DB_HOST;
-const dbUser = process.env.DB_USER;
-const dbPassword = process.env.DB_PASSWORD;
-const dbName = process.env.DB_NAME;
-const secretKey = process.env.SECRET_KEY;
+const dbHost = process.env.DB_HOST
+const dbUser = process.env.DB_USER
+const dbPassword = process.env.DB_PASSWORD
+const dbName = process.env.DB_NAME
 
 const app = express()
-app.use(cookieParser())
-app.use(express.json())
 app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true,
-}))
-app.options('*', cors({
-  origin: 'http://localhost:5173',
-  credentials: true,
-}));
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"]
+  }));
+app.use(express.json())
 
 const dbConfig = {
-  host: dbHost,
-  user: dbUser,
-  password: dbPassword,
-  database: dbName
+    host: dbHost,
+    user: dbUser,
+    password: dbPassword,
+    database: dbName
 };
 
 const createConnection = async () => {
   try {
-    const connection = await mysql.createConnection(dbConfig);
-    console.log("Conectado ao banco de dados MariaDB.");
-    return connection;
+    const connection = await mysql.createConnection(dbConfig)
+
+    return connection
+
   } catch (err) {
-    console.error("Erro ao conectar ao banco de dados:", err);
+    console.error("Erro ao conectar ao banco de dados:", err)
     throw err;
   }
 };
 
-app.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-
-  try {
-    const connection = await createConnection();
-    const [results] = await connection.query("SELECT * FROM login WHERE usuario = ?", [username]);
-
-
-    if(results.length === 0){
-        console.log("Usuário inválido.")
-        return res.status(401).json({ error: "Usuário inválido." });
-    }
-
-    const user = results[0];
-    const isMatch = password.localeCompare(user.senha)
-
-    if(isMatch != 0){
-        console.log("Senha inválida.")
-        return res.status(401).json({ error: "Senha inválida." });
-    }
-
-    const tokenMQ = jwt.sign({ username: user.usuario }, secretKey, { expiresIn: "1h" });
-    res.cookie('tokenMQ', tokenMQ, { httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000 });
-    res.json({message: "Login realizado com sucesso"})
-
-  } catch (err) {
-    console.error("Erro no servidor:", err);
-    res.status(500).json({ error: "Erro no servidor." });
-  }
-});
-
-app.get("/validarToken", (req, res) => {
-    const token = req.cookies.tokenMQ
-
-    if(!token){
-      return res.status(401).json({valido: false})
-    }
-
+app.get("/notas", async (req, res) => {
     try{
-      jwt.verify(token, secretKey)
-      res.json({valido: true})
+        const connection = await createConnection()
+        const [rows] = await connection.query('SELECT * FROM notas');
+        res.json(rows)
+        await connection.end();
     }
-    catch(error){
-      res.status(401).json({valido: false})
+    catch (error) {
+        console.error('Erro ao obter as notas', error)
+        res.status(500).json({error: 'Erro ao obter as notas'}) 
     }
+})
 
-});
+app.get("/nota/:id", async (req, res) => {
+  try{
+    const connection = await createConnection()
+    const id = req.params.id
+    const [rows] = await connection.query("SELECT nome, data, paga FROM notas WHERE id =" + id)
+    res.json(rows)
+    await connection.end()
+  }
+  catch (error) {
+    console.error(`Erro ao obter a a nota ${id}`)
+  }
+})
 
-const PORT = 3001;
+app.get("/itens-nota/:id", async (req, res) =>{
+  try{
+    const connection = await createConnection()
+    const id = req.params.id
+    const query = `SELECT i.id, i.quantidade, i.valor_unit, i.valor_total, p.nome, p.tamanho FROM itens_nota i, produtos p WHERE i.id_produto = p.id AND i.id_nota = ${id} ORDER BY p.nome`
+    const [rows] = await connection.query(query)
+    res.json(rows)
+    await connection.end()
+  }
+  catch (error){
+    console.error('Erro ao obter os produtos', error)
+        res.status(500).json({error: 'Erro ao obter os produtos'})
+  }
+})
+
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+    console.log(`Servidor rodando em http://localhost:${PORT}`)
 });

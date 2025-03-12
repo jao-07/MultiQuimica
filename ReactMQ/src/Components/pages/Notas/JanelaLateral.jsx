@@ -1,68 +1,99 @@
 import React from 'react'
-import { useState } from 'react'
 import styles from './JanelaLateral.module.css'
+import { useContext } from 'react'
+import { AppContext } from '../../../Context.jsx'
 
 const JanelaLateral = () =>{
 
-    const [vetorFiltro, setVetorFiltro] = useState([0,0,0,0])
+    const contexto = useContext(AppContext);
 
     const atualizarFiltro = (index, novoValor) => {
-        setVetorFiltro(vetorFiltro.map((item, i) => (i == index ? novoValor : item)));
-      };
+        contexto.setVetorFiltro(contexto.vetorFiltro.map((item, i) => (i == index ? novoValor : item)));
+    }
+
+    const atualizarSearch = (index, novoValor) => {
+        contexto.setVetorSearch(contexto.vetorSearch.map((item, i) => (i == index ? novoValor : item)));
+    }
 
     const handleClick = (event) => {
         const id = event.target.getAttribute("button-id");
         const type = event.target.getAttribute("type-button");
         if (id) {
-          atualizarFiltro(type, id);
+            if(contexto.vetorFiltro[type] == id)
+                atualizarFiltro(type, 0);
+            else
+                atualizarFiltro(type, id);
         }
     }
 
-    const botoes = [
-        {tipo: "Tempo", botao1: "Mais Antigo", botao2: "Menos Antigo"},
-        {tipo: "Valor", botao1: "Maior valor", botao2: "Menor valor"},
-        {tipo: "Ordem Alfabética", botao1: "Crescente", botao2: "Decrescente"},
+    const filter = [
+        {tipo: "Tempo", botoes: ["Mais antigas", "Mais novas"]},
+        {tipo: "Valor", botoes: ["Maior valor", "Menor valor"]},
+        {tipo: "Ordem Alfabética", botoes: ["Crescente", "Decrescente"]},
+        {tipo: "Situação", botoes: ["Paga", "Em aberto", "Vencida"]}
+    ]
+
+    const search = [
+        {label: "Nome:", type: "text"},
+        {label: "Nº da nota:", type: "number"},
+        {label: "Data:", type: "date"}
     ]
 
     return (
         <div className={styles.leftWindow}>
-            <div className={styles.search}>  
+            <div className={styles.selectSize}>
+                <h3>Tamanho máximo da lista:</h3>
+                <select value={contexto.tamanhoLista} onChange={e => contexto.setTamanhoLista(e.target.value)}>
+                    <option value="20">20</option>
+                    <option value="40">40</option>
+                    <option value="60">60</option>
+                    <option value="80">80</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+            <div className={styles.search}>
                 <h2>Buscar por:</h2>
-                <div>
-                    <p>Nome:</p>             
-                </div>
-                <input type="text" placeholder='Buscar'/>
-                <div>
-                    <p>Nº da nota:</p>             
-                </div>
-                <input type="number" placeholder='Buscar'/>    
-                <div>
-                    <p>Data:</p>             
-                </div>
-                <input type="date" placeholder='Buscar'/>  
+                {
+                    search.map((item, i) => {
+                        return(
+                            <div key={i}>
+                                <div>
+                                    <p>{item.label}</p>             
+                                </div>
+                                <input 
+                                    type={item.type} 
+                                    placeholder='Buscar' 
+                                    onChange={e => atualizarSearch(i,e.target.value)}
+                                    value={contexto.vetorSearch[i]}/>
+                            </div>
+                        )
+                    })   
+                }   
             </div>
             <div className={styles.filter} onClick={handleClick}>
                 <h2>Ordenar por:</h2>
-                <p>Tempo</p>
-                <div>
-                    <p button-id='1' type-button="0">Mais antigo</p>
-                    <p button-id='2' type-button="0">Mais Atual</p>
-                </div>
-                <p>Valor</p>
-                <div>
-                    <p button-id='1' type-button="1">Maior valor</p>
-                    <p button-id='2' type-button="1">Menor valor</p>
-                </div>
-                <p>Alfabética</p>
-                <div>
-                    <p button-id='1' type-button="2">Crescente</p>
-                    <p button-id='2' type-button="2">Decrescente</p>
-                </div>
-                <p>Nº da Nota</p>
-                <div>
-                    <p button-id='1' type-button="3">Crescente</p>
-                    <p button-id='2' type-button="3">Decrescente</p>
-                </div>
+                {
+                    filter.map((item, i) => {
+                        return(
+                            <div key={i}>
+                                <p>{item.tipo}</p>
+                                <div>
+                                    {item.botoes.map((botao, index) => (
+                                        <p 
+                                        button-id={index+1} 
+                                        type-button={i} 
+                                        key={index}
+                                        className={contexto.vetorFiltro[i] == index+1 ? styles.activeButton : styles.notActiveButton}
+                                        > 
+                                            {botao} 
+                                        </p>        
+                                    )
+                                    )}
+                                </div>
+                            </div>
+                        )
+                    })
+                }
             </div>
         </div>
     )

@@ -1,6 +1,7 @@
 .barra{
     position: fixed;
     width: 100%;
+    min-width: 500px;
     top: 0;
     display: flex;
     justify-content: end;

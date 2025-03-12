@@ -1,20 +1,67 @@
 .container{
-    background-color: green;
-    color: white;
+    width: 100%;
+}
+
+.tabela{
+    width: 100%;
 }
 
 .produto{
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0 10px 20px;
-    border-bottom: solid 2px;
+    border-bottom: solid 2px black;
 }
 
 .nome{
-    padding-left: 2vh;
+    min-width: 400px;
 }
 
-.quantidade{
-    padding-right: 2vh;
+th{
+    border: 1px solid black;
+    color: white;
 }
 
+td{
+    border: 1px solid black;
+    text-align: center;
+}
+
+thead{
+    background-color: green;
+}
+
+tfoot{
+    background-color: aliceblue;
+}
+
+tbody tr:nth-child(even){
+    background-color: wheat;
+}
+
+.totalNota{
+    text-align: end;
+    font-style: oblique;
+    padding: 5px 18px 0 0;
+}
+
+.editar{
+    display: flex;
+    justify-content: end;
+    padding: 10px 0 10px 20px;
+    background-color: black;
+    width: 100%;
+}
+
+.editar button{
+    font-size: 16px;
+    width: 20%;
+    border-radius: 10px;
+}
+
+.editar button:hover{
+    cursor: pointer;
+    background-color: green;
+}
+
+.editar button:active{
+    background-color: yellow;
+    color: black;
+}

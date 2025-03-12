@@ -2,7 +2,10 @@
     margin: 2vw 0 0 5vw;
     padding: 2vw 0 0 0;
     width: clamp(200px, 15vw, 400px);
-    border: solid green;
+    background-color: rgb(245, 245, 245);
+    box-shadow: 12px 12px 12px rgba(0, 0, 0, 0.1),
+    -10px -10px 10px white;
+    user-select: none;
 }
 
 .search{
@@ -41,18 +44,43 @@ h2{
 }
 
 .filter div{
-    margin: 1vh 0 4vh 0;
+    margin: 1vh 0 2vh 0;
     display: flex;
     flex-wrap: wrap;
 }
 
-.filter div:hover{
-    cursor: pointer;
-}
-
-.filter div p{
-    border: solid 1px;
+.notActiveButton{
+    border: solid 3px;
     border-radius: 5px;
     margin: 0 0 4px 5px;
     padding: 3px;
+}
+
+.activeButton{
+    border: solid black 3px;
+    border-radius: 5px;
+    margin: 0 0 4px 5px;
+    padding: 3px;
+    background-color: green;
+    color: white;
+}
+
+.filter div div p:hover{
+    cursor: pointer;
+}
+
+.selectSize{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 3px 30px;
+}
+
+.selectSize h3{
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.selectSize select{
+    width: 100px;
 }
